@@ -1,5 +1,7 @@
 # General Assistant Documentation
 
+This repository contains the two search-based applications called kiwAI and vanillAI.
+
 https://doc.sinequa.com/assistant/3.9/
 
 # Customize the Assistant styling
