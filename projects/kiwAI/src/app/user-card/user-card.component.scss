@@ -1,0 +1,35 @@
+@import "@sinequa/assistant/chat/styles/assistant";
+
+:host sq-user-menu::ng-deep {
+    .sq-dropdown-menu {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+        .dropdown-item {
+            padding-right: 1rem !important;
+        }
+    }
+
+    li {
+        list-style-type: none;
+    }
+
+    .dropdown-toggle::after {
+        content: none;
+    }
+
+    .version-menu {
+        font-size: small;
+        font-style: italic;
+        justify-content: end;
+    }
+}
+
+.sq-user-name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex-grow: 1;
+    margin-left: 0.4rem;
+    margin-right: 0.4rem;
+    font-weight: $fw-bold;
+}

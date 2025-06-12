@@ -1,0 +1,100 @@
+{
+    "app": {
+        "name": "VanillAI"
+    },
+
+    "locale": {
+        "en": "English (United States)",
+        "en-gb": "English (United Kingdom)",
+        "fr": "Français",
+        "de": "Deutsch"
+    },
+
+    "searchForm": {
+        "scopeTitle": "Scope: {name}",
+        "recentQuery": "Recent query",
+        "recentDocument": "Recent document",
+        "helpButton": "Learn more about search"
+    },
+
+    "baskets": {
+        "baskets": "Collections",
+        "addToBasket": "Add to collection",
+        "removeFromBasket": "Remove from collection",
+        "removeFromAllBaskets": "Remove from all collections",
+        "removeFromAllBasketsConfirmation": "Are you sure you want to remove this result from these collections: {baskets}?",
+        "basketAlreadyExists": "A collection with that name already exists. Would you like to replace it?",
+        "noBasket": "You have not yet added a document to a collection...",
+        "createBasket": "Create Collection",
+        "manageBaskets": "Manage Collections",
+        "delete": "Delete this collection"
+    },
+
+    "editBasket": {
+        "title": "Collection"
+    },
+
+    "manageBaskets": {
+        "title": "Manage Collections",
+        "tooltip": {
+            "export": "Export this collection"
+        }
+    },
+
+    "selectBasket": {
+        "title": "Select Collection",
+        "newBasket": "New collection..."
+    },
+
+    "facet": {
+        "preview": {
+            "title": "Preview"
+        },
+        "labels": {
+            "title": "Labels"
+        }
+    },
+
+    "results": {
+        "tabPeople": "People",
+        "tabBusiness": "Companies",
+        "tabLocation": "Places"
+    },
+
+    "home": {
+        "recentDocumentsTooltip": "Recently opened documents",
+        "recentQueriesTooltip": "Recent search queries",
+        "savedQueriesTooltip": "Saved search queries (including filters)",
+        "basketsTooltip": "Collections of bookmarked documents",
+        "darkMode": "Dark mode",
+        "lightMode": "Light mode"
+    },
+
+    "search": {
+        "pageTitle": "Search - {search}"
+    },
+
+    "preview": {
+        "extracts": "Extracts",
+        "entities": "Entities",
+        "assistant": "Assistant",
+        "passages": "Passages",
+        "searchText": "Search \"{text}\" in the document",
+        "pageTitle": "Document Navigator - {title}",
+        "expand": "Expand",
+        "collapse": "Collapse",
+        "back": "Back",
+        "home": "Home",
+        "downloadPdf": "Download PDF version",
+        "original": "Original document",
+        "summary": "Summary"
+    },
+
+    "noResult": {
+        "title": "We couldn't find relevant documents that match your search query!",
+        "description": "Consider using keywords that are likely to be present on the relevant pages. For instance, try \"travel policy US \" instead of \"How much can I spend for a lunch in New Jersey?\".",
+        "help": "If you need assistance, check out additional",
+        "link": "search tips"
+    }
+
+}

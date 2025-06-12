@@ -1,0 +1,31 @@
+<sq-facet-card *ngIf="openedDoc"
+  [collapsible]="false"
+  [facetActionsAreSecondary]="true"
+  secondaryActionsClass="position-absolute end-0 btn-group-vertical mt-4 me-3 bg-light rounded shadow on-hover"
+  [actions]="previewCustomActions"
+  actionsSize=""
+  class="facet-preview position-absolute end-0 start-0">
+
+  <ng-template #headerTpl>
+    <sq-result-icon [record]="openedDoc" class="me-1"></sq-result-icon>
+    <sq-result-title class="flex-grow-1" [record]="openedDoc" field="title" titleLinkBehavior="open-if-url">
+    </sq-result-title>
+  </ng-template>
+
+  <ng-template #subHeaderTpl>
+    <sq-metadata [record]="openedDoc" [config]="metadata" [layout]="'table'" class="small"></sq-metadata>
+  </ng-template>
+
+  <sq-preview #facet
+    style="height: 100%;"
+    [id]="openedDoc.id"
+    [highlightColors]="previewHighlights"
+    [highlightEntities]="false"
+    [highlightActions]="false"
+    [preferenceName]="'mini-preview'"
+    [scale]="0.8"
+    [customHighlights]="customHighlights"
+    [usePassageHighlighter]="['extractslocations', 'matchingpassages', 'snippet']"
+    (ready)="onPreviewReady(facet)">
+  </sq-preview>
+</sq-facet-card>

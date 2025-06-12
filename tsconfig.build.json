@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "projects/**/*.ts"
+  ],
+  "exclude":["projects/**/test.ts","**/*.spec.ts"],
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "declaration": true,
+    "sourceMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "enableResourceInlining": true,
+    "compilationMode": "partial"
+  }
+}

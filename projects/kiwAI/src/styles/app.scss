@@ -1,0 +1,63 @@
+/****************************************************
+    colors overrides
+****************************************************/
+$secondary: #515960;
+$link-decoration: none;
+
+$nav-link-color: rgb(0, 0, 0, 0.55);
+$nav-link-hover-color: rgb(0, 0, 0, .7);
+
+/****************************************************
+    Dark colors
+****************************************************/
+$dark-color: #f8f9fa;
+$dark-secondary: #c9c0c0;
+$dark-background: #1c1e21;
+$dark-background-highlight: rgb(255, 255, 255, 0.15);
+$dark-background-hover: rgb(255, 255, 255, 0.08);
+$dark-borders: #777373;
+$dark-link: #9bccff;
+
+$navbar-padding-y: 1.25rem;
+
+// thin scrollbar
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+
+  &:hover {
+    background-color: #b6b6b6;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f3f3f3;
+}
+
+@import "@sinequa/components/theme/breakpoints";
+
+// Sinequa global theme (contains Bootstrap imports)
+@import "@sinequa/components/theme/sinequa";
+
+// File formats & metadata icons
+@import "icons";
+
+// Dark theme
+@import "dark";
+
+// Global assistant styles
+@import "@sinequa/assistant/chat/styles/assistant";
+
+// PrismJS theme used by the assistant
+@import "prismjs/themes/prism-okaidia.css";
+
+#sinequa-loading-logo {
+  content: url('../assets/sinequa-logo-light-lg.png');
+}
+
+sq-user-menu ul ul {
+  transform: translate(5%, -40px) !important;
+}

@@ -1,0 +1,76 @@
+
+<ng-container *ngIf="loginService.complete">
+
+  <sq-saved-chats-v3
+    class="d-block sq-saved-chat"
+    [instanceId]="instanceId">
+  </sq-saved-chats-v3>
+
+  <ng-container *ngIf="results$ | async as results">
+    <!-- Source facet -->
+    <sq-facet-card
+      [title]="'msg#facet.treepath.title'"
+      icon="fas fa-sitemap"
+      [collapsible]="false"
+      class="mb-3 flex-grow-1 sq-source">
+      <!-- Filters -->
+      <div
+        class="d-flex small my-2 position-relative"
+        *ngIf="searchService.query.filters">
+        <span class="me-1">
+          <i class="fas fa-filter p-1"></i>
+          <b>{{ 'filters' | transloco }}:</b>
+        </span>
+        <sq-filters
+          [query]="searchService.query"
+          [filter]="searchService.query.filters"
+          [showField]="false"
+          (filterEdit)="onQueryChange($event)">
+        </sq-filters>
+      </div>
+
+      <sq-facet-list
+        #facet
+        [results]="results"
+        [aggregation]="'Treepath'"
+        [query]="searchService.query">
+      </sq-facet-list>
+    </sq-facet-card>
+  </ng-container>
+
+  <sq-facet-card
+    *ngIf="isDocumentsUploadEnabled"
+    [title]="'documentsInSources' | transloco"
+    icon="fa-regular fa-folder-open"
+    [actions]="[refreshAction]"
+    [collapsible]="false">
+    <sq-document-overview
+      [instanceId]="instanceId"
+      [disabledUpload]="disabledUpload"
+      (onUpload)="openDialog()">
+    </sq-document-overview>
+  </sq-facet-card>
+
+</ng-container>
+
+<dialog popover #dialog *ngIf="isDocumentsUploadEnabled">
+  <div class="modal-header">
+    <h4>{{'uploadToSources' | transloco}}</h4>
+    <i class="fas fa-times close-btn" (click)="closeDialog()"></i>
+  </div>
+
+  <main class="modal-body">
+    <sq-document-upload #sqDocumentUpload [instanceId]="instanceId"></sq-document-upload>
+
+    <sq-facet-card
+      [title]="uploadedDocumentsTitle"
+      icon="fa-regular fa-folder-open"
+      [actions]="[documentListDeleteAllAction, documentListRefreshAction]"
+      [collapsible]="false">
+      <sq-document-list
+        #sqDocumentList
+        [instanceId]="instanceId">
+      </sq-document-list>
+    </sq-facet-card>
+  </main>
+</dialog>

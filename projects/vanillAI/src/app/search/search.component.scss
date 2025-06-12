@@ -1,0 +1,218 @@
+.main {
+  margin-top: 1rem;
+  margin-bottom: 20px;
+}
+
+#logo {
+  content: url("^assets/sinequa-logo-light-sm.png");
+  width: 40px;
+  max-height: 40px;
+
+  @media ( min-width: 1200px ) {
+      content: url("^assets/sinequa-logo-light-lg.png");
+      width: 160px;
+  }
+}
+
+:host-context(body.dark) {
+  #logo {
+      content: url("^assets/sinequa-logo-dark-sm.png");
+      width: 40px;
+      max-height: 40px;
+
+      @media ( min-width: 1200px ) {
+          content: url("^assets/sinequa-logo-dark-lg.png");
+          width: 160px;
+      }
+  }
+}
+
+.sq-facet-bar {
+  position: relative;
+  z-index: 1; // This is needed for dropdown menus from the facet actions not to be masked by the sq-filters-view which has position: relative
+}
+
+// Styling of the result items
+.record {
+  display: flex;
+  overflow: hidden;
+  cursor: pointer;
+
+  --sq-record-padding-x: 15px;
+  --sq-record-padding-y: 0.5em;
+
+  padding: var(--sq-record-padding-y) var(--sq-record-padding-x);
+  margin: 0 calc(var(--sq-record-padding-x) * -1);
+
+  &:hover {
+      background-color: rgb(0, 0, 0, 0.03);
+  }
+
+  &.selected {
+      background-color: rgb(0, 0, 0, 0.05);
+  }
+
+  &.duplicate {
+      sq-result-extracts, sq-result-duplicates, sq-missing-terms, sq-result-thumbnail {
+          display: none !important;
+      }
+      sq-result-duplicates-spacer {
+          margin: calc(var(--sq-record-padding-y) * -1) 0.5rem; // This negative margin cancels the padding from the .record, which allows the spacer to take 100% height
+      }
+      &:has(+.duplicate) sq-result-duplicates-spacer {
+          height: auto; // Override the default height of this component so it takes 100% height
+      }
+  }
+
+  .flex-grow-1 {
+      min-width: 0; // force the flex item to shrink to the parent size
+  }
+}
+
+// Selection / Action bar on top of results (position: fixed)
+.card-action-bar {
+  bottom: 10px;
+  margin-left: 15px;
+  z-index: 4;
+}
+
+// The default view in the mini preview when nothing is selected
+.no-record ::ng-deep {
+  .card {
+      height: min(100vh, 100vh - 120px);
+  }
+  sq-collapse {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: clip; // similar to hidden, but forbids all scrolling
+  }
+
+  img {
+      width: 10rem;
+  }
+
+  p {
+      max-width: 50%;
+      margin: auto;
+  }
+}
+
+.app-search-form {
+  flex-grow: 100;
+  min-height: 41px;
+}
+
+/** ANIMATIONS **/
+nav {
+  opacity: .1;
+  animation: apparition 0.8s ease-out forwards;
+}
+
+main,
+.record {
+  will-change: transform;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: apparition 0.8s ease-out forwards;
+}
+
+@keyframes apparition {
+  100% {
+      opacity: 1;
+      transform: none;
+  }
+}
+
+::ng-deep .similar-document span::after {
+  content: "\f35d";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  vertical-align: .25rem;
+  font-size: .55rem;
+  padding-left: .25rem;
+}
+
+.sq-chat {
+display: block;
+height: 500px;
+position: relative;
+}
+
+.sq-summarize-chat {
+position: relative;
+height: calc(100vh - 300px);
+display: block;
+}
+
+::ng-deep sq-passage-list {
+display: block;
+height: calc(100vh - 300px);
+
+& .list-group {
+  max-height: 100% !important;
+}
+}
+
+.attachToAssistant {
+width: 135px;
+padding: 0.2rem;
+font-size: 0.75rem;
+margin-left: auto !important;
+
+&.active {
+  color: rgb(255 122 0);
+  background-color: rgb(255 247 237);
+  border: 1px solid rgb(255 237 213);
+}
+
+&.inactive {
+  opacity: 0.5;
+  pointer-events: none;
+  color: rgb(156 163 175);
+  background-color: rgb(243 244 246);
+  border: 1px solid rgb(229 231 235);
+}
+}
+
+dialog {
+border: none;
+border-radius: 8px;
+box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+width: 500px;
+max-height: 500px;
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+
+  h4 {
+    margin: 0;
+  }
+}
+
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.modal-body {
+  padding: 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+}

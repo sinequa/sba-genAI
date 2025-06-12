@@ -1,0 +1,56 @@
+// Flag images
+.sq-flag-en:before {
+    content: url('../resources/flags/flag-en.jpg');
+}
+
+.sq-flag-en-gb:before {
+    content: url('../resources/flags/flag-en-gb.jpg');
+}
+
+.sq-flag-fr:before {
+    content: url('../resources/flags/flag-fr.jpg');
+}
+
+.sq-flag-de:before {
+    content: url('../resources/flags/flag-de.jpg');
+}
+
+.sq-logo:before {
+    content: url('../assets/favicon.png');
+}
+
+.sq-sinequa {
+  --sq-size: 40px;
+  &:before {
+    content: "";
+    display:block;
+    height: var(--sq-size);
+    width: var(--sq-size);
+    background-size: var(--sq-size) var(--sq-size);
+    background-image: url('../assets/sinequa.svg');
+    background-repeat: no-repeat;
+  }
+}
+
+.sq-logo {
+    height: 1rem;
+    align-self: center;
+}
+
+// Custom icon for "clear filters", obtained as a combination of "fa-filter" and "fa-times-circle"
+.sq-filter-clear {
+  @extend .fas;
+  @extend .fa-filter;
+  position: relative;
+  width: 1.25em;
+  &::before {
+    margin-right: 0.2em;
+  }
+  &::after {
+    content: "\f057";
+    font-size: 0.75em;
+    position: absolute;
+    bottom: -0.05em;
+    right: -0.32em;
+  }
+}

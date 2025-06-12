@@ -1,0 +1,77 @@
+/****************************************************
+    DARK theme
+****************************************************/
+@import "@sinequa/components/theme/dark-colors";
+
+body.dark {
+
+    .form-control,
+    .form-select,
+    .form-check-input {
+        background-color: $dark-background;
+        color: white;
+    }
+
+    app-search-form {
+
+        .form-control,
+        .form-control:focus-within {
+            background-color: $dark-background;
+            color: $dark-color;
+        }
+
+        .form-control .search-input {
+            background-color: transparent;
+            color: $dark-color;
+        }
+    }
+
+    .record {
+
+        &:hover {
+            background-color: $dark-background-hover;
+        }
+
+        &.selected {
+            background-color: $dark-background-highlight;
+        }
+
+        sq-result-source {
+
+            span,
+            a:not(.btn):not(.badge) {
+                color: $dark-result-source-color;
+            }
+        }
+
+        sq-result-extracts {
+            p {
+                color: $dark-secondary;
+            }
+        }
+
+        sq-result-missing-terms {
+            color: $dark-secondary;
+        }
+
+        sq-result-duplicates {
+            color: $dark-secondary;
+        }
+    }
+
+    app-preview {
+
+        .border-top,
+        .border-right {
+            border-color: $dark-borders;
+        }
+    }
+
+    sq-help-button .btn {
+        color: #c1cad2;
+    }
+
+    #sinequa-loading-logo {
+        content: url('../assets/sinequa-logo-dark-lg.png');
+    }
+}

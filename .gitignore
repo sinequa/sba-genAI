@@ -1,0 +1,71 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/dist-debug
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+
+# dependencies
+/**/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+/cypress/snapshots/diff
+/cypress/videos
+/cypress/screenshots
+
+# System Files
+.DS_Store
+Thumbs.db
+
+/projects/kiwAI/src/assets/i18n/chat-message
+/projects/kiwAI/src/assets/i18n/chat-reference
+/projects/kiwAI/src/assets/i18n/chat-settings
+/projects/kiwAI/src/assets/i18n/chat-debug-message
+/projects/kiwAI/src/assets/i18n/chat-dialogs
+/projects/kiwAI/src/assets/i18n/chat-documents-upload
+/projects/kiwAI/src/assets/i18n/saved-chats
+/projects/kiwAI/src/assets/i18n/token-consumption
+/projects/kiwAI/src/assets/i18n/chat
+
+/projects/vanillAI/src/assets/i18n/chat-message
+/projects/vanillAI/src/assets/i18n/chat-settings
+/projects/vanillAI/src/assets/i18n/chat-debug-message
+/projects/vanillAI/src/assets/i18n/chat-reference
+/projects/vanillAI/src/assets/i18n/chat-dialogs
+/projects/vanillAI/src/assets/i18n/chat-documents-upload
+/projects/vanillAI/src/assets/i18n/saved-chats
+/projects/vanillAI/src/assets/i18n/token-consumption
+/projects/vanillAI/src/assets/i18n/chat

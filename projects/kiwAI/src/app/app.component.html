@@ -1,0 +1,55 @@
+<div class="main-container" *ngIf="(loginService.complete) else loadingTpl">
+
+  <div class="sidebar">
+
+    <!-- Logo -->
+    <img id="logo" alt="sinequa logo" class="mx-auto mt-3 mb-4">
+
+    <!-- Chat options -->
+    <button class="btn mb-4 ast-primary-hover ast-btn sq-new-discussion"
+      [class.forbidden]="disableResetChat"
+      [disabled]="settingsView"
+      (click)="openDefaultChat()">
+      <i class="fas fa-comment-medical me-2"></i>
+      <span>{{ 'newDiscussion' | transloco }}</span>
+      <i class="fas fa-plus fw-light ms-1"></i>
+    </button>
+
+    <sq-sidebar></sq-sidebar>
+
+    <sq-user-card class="m-3" [enableSettings]="enableSettings" (toggleChatSettings)="toggleChatSettings(true)"></sq-user-card>
+
+  </div>
+
+  <main class="flex-grow-1 position-relative shadow-sm overflow-hidden">
+
+    <sq-chat-v3 #sqChat
+      [hidden]="settingsView"
+      [instanceId]="instanceId"
+      [query]="searchService.query"
+      [focusAfterResponse]="true"
+
+      (config)="onChatConfig($event)"
+      (openPreview)="openMiniPreviewWithChunks($event, preview)"
+      (openDocument)="openDocument($event)"
+      (suggestAction)="onSuggestAction($event)">
+    </sq-chat-v3>
+
+    <sq-chat-settings-v3 *ngIf="settingsView"
+      [instanceId]="instanceId"
+      (update)="toggleChatSettings(false)"
+      (cancel)="toggleChatSettings(false)">
+    </sq-chat-settings-v3>
+
+    <sq-mini-preview #preview></sq-mini-preview>
+
+  </main>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="spinner-grow text-success d-block mx-auto my-auto" role="status">
+    <span class="visually-hidden">{{ 'loading' | transloco }}</span>
+  </div>
+</ng-template>
+
+<sq-notifications></sq-notifications>
