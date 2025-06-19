@@ -1,6 +1,6 @@
 {
   "name": "genAI-apps",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "scripts": {
     "ng": "ng",
     "start:kiwAI": "ng serve kiwAI --proxy-config=./projects/kiwAI/src/proxy.conf.json",
@@ -44,7 +44,7 @@
     "@microsoft/teams-js": "^2.3.0",
     "@popperjs/core": "^2.10.2",
     "@sinequa/analytics": "rel_11.13.0",
-    "@sinequa/assistant": "^3.9.0",
+    "@sinequa/assistant": "^3.9.1",
     "@sinequa/atomic": "^0.0.96",
     "@sinequa/components": "rel_11.13.0",
     "@sinequa/core": "rel_11.13.0",
