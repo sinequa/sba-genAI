@@ -74,4 +74,9 @@ body.dark {
     #sinequa-loading-logo {
         content: url('../assets/sinequa-logo-dark-lg.png');
     }
+
+    dialog {
+        background-color: $dark-background;
+        color: white;
+    }
 }
