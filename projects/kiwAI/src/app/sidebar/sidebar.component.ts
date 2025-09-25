@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { TranslocoPipe, TranslocoService } from "@jsverse/transloco";
-import { BehaviorSubject, filter, merge, Observable, Subscription, switchMap, tap } from "rxjs";
+import { BehaviorSubject, filter, merge, Observable, Subscription, switchMap, take, tap } from "rxjs";
 
-import { DocumentUploadComponent, SavedChatsComponent, DocumentListComponent, DocumentOverviewComponent } from "@sinequa/assistant/chat";
+import { DocumentUploadComponent, SavedChatsComponent, DocumentListComponent, DocumentOverviewComponent, DocumentsUploadService } from "@sinequa/assistant/chat";
 import { Action } from "@sinequa/components/action";
 import { BsFacetModule, FacetService } from "@sinequa/components/facet";
 import { FiltersModule } from "@sinequa/components/filters";
@@ -32,17 +32,15 @@ import { Results } from "@sinequa/core/web-services";
 })
 export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("dialog") dialog: ElementRef<HTMLDialogElement>;
-  @ViewChild(DocumentOverviewComponent) sqDocumentOverview: DocumentOverviewComponent;
-  @ViewChild(DocumentUploadComponent) sqDocumentUpload: DocumentUploadComponent;
   @ViewChild(DocumentListComponent) sqDocumentList: DocumentListComponent;
 
   public refreshAction = new Action({
     icon: "fas fa-sync",
-    action: () => this.sqDocumentOverview?.updateUploadedDocumentsList()
+    action: () => this.documentsUploadService.getDocumentsList().pipe(take(1)).subscribe()
   });
   public documentListRefreshAction = new Action({
     icon: "fas fa-sync",
-    action: () => this.sqDocumentList?.updateUploadedDocumentsList()
+    action: () => this.documentsUploadService.getDocumentsList().pipe(take(1)).subscribe()
   });
   public documentListDeleteAllAction = new Action({
     icon: 'fas fa-trash',
@@ -63,7 +61,8 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     public firstPageService: FirstPageService,
     public facetService: FacetService,
     public cdr: ChangeDetectorRef,
-    private readonly transloco: TranslocoService
+    private readonly transloco: TranslocoService,
+    public documentsUploadService: DocumentsUploadService
   ) {
     // Load the current language once (in case it's not already loaded)
     this.transloco.load(this.transloco.getActiveLang()).subscribe(() => {
@@ -109,16 +108,10 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this._subscription.add(
-      this.sqDocumentUpload?.documentsUploadService
-        .uploadConfig$.subscribe((uploadConfig) => {
-          this.disabledUpload = !uploadConfig?.documentsUploadEnabled;
-        })
+      this.documentsUploadService.uploadConfig$.subscribe((uploadConfig) => {
+        this.disabledUpload = !uploadConfig?.documentsUploadEnabled;
+      })
     );
-
-    // Update the document list after the dialog is closed
-    this.dialog?.nativeElement.addEventListener("close", (event) => {
-      this.sqDocumentOverview.updateUploadedDocumentsList();
-    });
   }
 
   ngOnDestroy() {

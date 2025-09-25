@@ -36,7 +36,8 @@
                 "input": "projects/kiwAI/src/styles/app.scss",
                 "bundleName": "app"
               },
-              { "input": "projects/kiwAI/src/assets/preview.css", "inject": false }
+              { "input": "projects/kiwAI/src/assets/preview.css", "inject": false },
+              { "input": "node_modules/highlight.js/styles/obsidian.css", "bundleName": "obsidian" }
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
@@ -183,7 +184,8 @@
                 "input": "projects/vanillAI/src/styles/app.scss",
                 "bundleName": "app"
               },
-              { "input": "projects/vanillAI/src/assets/preview.css", "inject": false }
+              { "input": "projects/vanillAI/src/assets/preview.css", "inject": false },
+              { "input": "node_modules/highlight.js/styles/obsidian.css", "bundleName": "obsidian" }
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
@@ -298,6 +300,9 @@
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "cache": {
+      "enabled": false
+    }
   }
 }

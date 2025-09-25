@@ -71,7 +71,6 @@
             class="mb-3 sq-source">
             <sq-document-overview
               *ngIf="isChatInitialized"
-              [instanceId]="instanceId"
               [disabledUpload]="disabledUpload"
               (onUpload)="openDialog()">
             </sq-document-overview>
@@ -295,17 +294,14 @@
   </div>
 
   <main class="modal-body">
-    <sq-document-upload #sqDocumentUpload [instanceId]="instanceId"></sq-document-upload>
+    <sq-document-upload #sqDocumentUpload></sq-document-upload>
 
     <sq-facet-card
       [title]="uploadedDocumentsTitle"
       icon="fa-regular fa-folder-open"
       [actions]="[documentListDeleteAllAction, documentListRefreshAction]"
       [collapsible]="false">
-      <sq-document-list
-        #sqDocumentList
-        [instanceId]="instanceId">
-      </sq-document-list>
+      <sq-document-list #sqDocumentList></sq-document-list>
     </sq-facet-card>
 
   </main>

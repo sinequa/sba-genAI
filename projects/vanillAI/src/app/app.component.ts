@@ -2,7 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { TranslocoService } from "@jsverse/transloco";
 import { Subscription } from "rxjs";
 
-import { ComponentWithLogin } from "@sinequa/core/login";
+import { AuthenticationService, ComponentWithLogin } from "@sinequa/core/login";
 import { BasketsService } from '@sinequa/components/baskets';
 import { SavedQueriesService, RecentQueriesService, RecentDocumentsService } from '@sinequa/components/saved-queries';
 import { AlertsService } from '@sinequa/components/alerts';
@@ -15,6 +15,7 @@ import { HighlightService } from "@sinequa/components/metadata";
 import { PreviewHighlightColors } from "@sinequa/components/preview";
 import { NotificationsListenerService } from "./notification.listener";
 import { IntlService } from "@sinequa/core/intl";
+import { setGlobalConfig } from "@sinequa/atomic";
 
 @Component({
     selector: "app",
@@ -40,7 +41,8 @@ export class AppComponent extends ComponentWithLogin implements OnDestroy {
         public appService: AppService,
         private intlService: IntlService,
         private readonly transloco: TranslocoService,
-        public notificationsListenerService: NotificationsListenerService
+        public notificationsListenerService: NotificationsListenerService,
+        private authenticationService: AuthenticationService
     ){
         super();
         this.transloco.setActiveLang(this.intlService.currentLocale.name);
@@ -93,7 +95,20 @@ export class AppComponent extends ComponentWithLogin implements OnDestroy {
 
             const highlights: {selectors: string[], highlights: PreviewHighlightColors[]}[] = this.appService.app.data?.highlights as any || SELECTORS_HIGHLIGHTS;
             this.highlightService.setHighlights(highlights);
+        }
 
+        /**
+         * The assistant library is now using the globalConfig object to manage user override
+         * Thus, it relies on the atomic library.
+         * However, the VanillAI app does not use the atomic library. It uses the core and components libraries under the hood.
+         * To ensure the user override feature works correctly, we need to manually propagate the user override state to the globalConfig object.
+         */
+        if (this.authenticationService.userOverrideActive && this.authenticationService.userOverride) {
+          const username = this.authenticationService.userOverride.userName;
+          const domain = this.authenticationService.userOverride.domain;
+          setGlobalConfig({ userOverrideActive: true, userOverride: { domain, username } });
+        } else {
+          setGlobalConfig({ userOverrideActive: false, userOverride: undefined });
         }
     }
 
