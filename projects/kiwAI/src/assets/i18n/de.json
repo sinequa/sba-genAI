@@ -1,0 +1,18 @@
+{
+  "newDiscussion": "Neue Diskussion",
+  "loading": "Wird geladen…",
+  "openSettings": "Assistenten-Einstellungen öffnen",
+  "filters": "Filter",
+  "documentsInSources": "Meine Dokumente in Quellen",
+  "refresh": "Aktualisieren",
+  "deleteAll": "Alle löschen",
+  "uploadToSources": "In Quellen hochladen",
+  "uploaded": "Hochgeladen",
+  "assistant": {
+    "userPrompt": "Hallo, mein Name ist [[principal.fullName]].",
+    "connectionErrorMessage": "Verbindung verloren! Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.",
+    "genericChatErrorMessage": "Entschuldigung, bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten… 🥺",
+    "searchWarningMessage": "Sie müssen eine Volltextsuche durchführen, um Ergebnisse zu erhalten.",
+    "disclaimer": "Dieser Inhalt wurde von KI generiert und kann Fehler enthalten. Bitte überprüfen Sie die Zitate auf Richtigkeit."
+  }
+}

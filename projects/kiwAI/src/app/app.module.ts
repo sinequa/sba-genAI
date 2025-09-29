@@ -1,28 +1,28 @@
-import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { LocationStrategy, HashLocationStrategy } from "@angular/common";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import Flow from '@flowjs/flow.js';
 import { FlowInjectionToken } from '@flowjs/ngx-flow';
 
 // @sinequa/core library
-import { WebServicesModule, StartConfigWebService, StartConfig } from "@sinequa/core/web-services";
-import { LoginModule, LoginInterceptor, TeamsInitializer, AuthenticationService } from "@sinequa/core/login";
-import { IntlModule } from "@sinequa/core/intl";
-import { MODAL_PROMPT, ModalModule } from "@sinequa/core/modal";
-import { NotificationsInterceptor } from "@sinequa/core/notification";
 import { AuditInterceptor } from "@sinequa/core/app-utils";
+import { IntlModule } from "@sinequa/core/intl";
+import { AuthenticationService, LoginInterceptor, LoginModule, TeamsInitializer } from "@sinequa/core/login";
+import { ModalModule } from "@sinequa/core/modal";
+import { NotificationsInterceptor } from "@sinequa/core/notification";
+import { StartConfig, StartConfigWebService, WebServicesModule } from "@sinequa/core/web-services";
 
 // @sinequa/components library
-import { BsSearchModule, SearchOptions } from "@sinequa/components/search";
-import { BsNotificationModule } from "@sinequa/components/notification";
-import { SCREEN_SIZE_RULES } from '@sinequa/components/utils';
-import { BsUserSettingsModule } from '@sinequa/components/user-settings';
+import { ChatComponent, ChatSettingsV3Component, CustomElementsService, initializeCustomElements, SavedChatsComponent } from '@sinequa/assistant/chat';
 import { MLModule } from '@sinequa/components/machine-learning';
-import { ChatComponent, ChatPrompt, ChatSettingsV3Component, SavedChatsComponent } from '@sinequa/assistant/chat';
+import { BsNotificationModule } from "@sinequa/components/notification";
+import { BsSearchModule, SearchOptions } from "@sinequa/components/search";
+import { BsUserSettingsModule } from '@sinequa/components/user-settings';
+import { SCREEN_SIZE_RULES } from '@sinequa/components/utils';
 
 import { appInitializerFn } from "@sinequa/atomic";
 
@@ -58,9 +58,10 @@ export const searchOptions: SearchOptions = {
 
 
 // Application languages (intl service)
-import {LocalesConfig, Locale} from "@sinequa/core/intl";
+import { Locale, LocalesConfig } from "@sinequa/core/intl";
 import enLocale from "../locales/en";
 import frLocale from "../locales/fr";
+import deLocale from "../locales/de";
 
 export class AppLocalesConfig implements LocalesConfig {
     defaultLocale: Locale;
@@ -68,7 +69,8 @@ export class AppLocalesConfig implements LocalesConfig {
     constructor(){
         this.locales = [
             { name: "en", display: "msg#locale.en", data: enLocale},
-            { name: "fr", display: "msg#locale.fr", data: frLocale}
+            { name: "fr", display: "msg#locale.fr", data: frLocale},
+            { name: "de", display: "msg#locale.de", data: deLocale}
         ];
         this.defaultLocale = this.locales[0];
     }
@@ -109,7 +111,6 @@ export const breakpoints = {
         ChatSettingsV3Component,
         SavedChatsComponent,
         UserCardComponent,
-        ChatPrompt,
         TranslocoRootModule
     ],
     declarations: [
@@ -124,6 +125,15 @@ export const breakpoints = {
         { provide: APP_INITIALIZER, useFactory: () => appInitializerFn, multi: true },
         // Uncomment if the app is to be used with Teams
         {provide: APP_INITIALIZER, useFactory: TeamsInitializer, deps: [AuthenticationService], multi: true},
+
+        // Provides an APP_INITIALIZER which will initialize the custom elements defined in the @sinequa/assistant/chat
+        // library. This is required to be able to use the custom elements in Angular components templates.
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeCustomElements,
+            multi: true,
+            deps: [CustomElementsService],
+        },
 
         // Provides the Angular LocationStrategy to be used for reading route state from the browser's URL. Currently
         // only the HashLocationStrategy is supported by Sinequa.
@@ -143,7 +153,6 @@ export const breakpoints = {
         {provide: HTTP_INTERCEPTORS, useClass: NotificationsInterceptor, multi: true},
 
         { provide: SCREEN_SIZE_RULES, useValue: breakpoints },
-        { provide: MODAL_PROMPT, useValue: ChatPrompt },
         { provide: FlowInjectionToken, useValue: Flow }
     ],
     bootstrap: [

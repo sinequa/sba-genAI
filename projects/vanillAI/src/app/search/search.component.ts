@@ -13,11 +13,11 @@ import { AppService, Query } from '@sinequa/core/app-utils';
 import { IntlService } from '@sinequa/core/intl';
 import { LoginService } from '@sinequa/core/login';
 import { AuditEventType, AuditWebService, CustomHighlights, PrincipalWebService, Record, Results } from '@sinequa/core/web-services';
-import { combineLatest, map, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { combineLatest, map, Observable, Subscription, switchMap, take, tap } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { FACETS, FEATURES, FacetParams, METADATA_CONFIG, PREVIEW_HIGHLIGHTS } from '../../config';
-import { ChatComponent, ChatConfig, ChatContextAttachment, DocumentOverviewComponent, DocumentUploadComponent, SuggestedAction, DocumentListComponent } from '@sinequa/assistant/chat';
+import { ChatComponent, ChatConfig, ChatContextAttachment, SuggestedAction, DocumentListComponent, DocumentsUploadService } from '@sinequa/assistant/chat';
 
 @Component({
   selector: 'app-search',
@@ -28,8 +28,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   @ViewChild(ChatComponent) sqChat: ChatComponent;
   @ViewChild("dialog") dialog: ElementRef<HTMLDialogElement>;
-  @ViewChild(DocumentOverviewComponent) sqDocumentOverview: DocumentOverviewComponent;
-  @ViewChild(DocumentUploadComponent) sqDocumentUpload: DocumentUploadComponent;
   @ViewChild(DocumentListComponent) sqDocumentList: DocumentListComponent;
 
   // Document "opened" via a click (opens the preview facet)
@@ -104,7 +102,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     public auditService: AuditWebService,
     private principalService: PrincipalWebService,
-    private readonly transloco: TranslocoService
+    private readonly transloco: TranslocoService,
+    public documentsUploadService: DocumentsUploadService
   ) {
 
     this.chatSettingsAction = new Action({
@@ -121,12 +120,12 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.documentOverviewRefreshAction = new Action({
       icon: "fas fa-sync",
-      action: () => this.sqDocumentOverview?.updateUploadedDocumentsList()
+      action: () => this.documentsUploadService.getDocumentsList().pipe(take(1)).subscribe()
     });
 
     this.documentListRefreshAction = new Action({
       icon: "fas fa-sync",
-      action: () => this.sqDocumentList?.updateUploadedDocumentsList()
+      action: () => this.documentsUploadService.getDocumentsList().pipe(take(1)).subscribe()
     });
 
     this.documentListDeleteAllAction = new Action({
@@ -277,7 +276,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   openMiniPreviewWithChunks(ref: ChatContextAttachment) {
-    const customHighlights = !ref.parts.length ? undefined : [{
+    const customHighlights = !ref.parts?.length ? undefined : [{
       category: "snippet",
       highlights: ref.parts,
     }];
@@ -314,8 +313,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.miniPreviewQuery.text = this.searchService.query.text || record.title;
     this.miniPreviewQuery.addFilter({field: "id", value: record.id, operator: "eq"});
 
+    this.preview = undefined;
     if(this.openedDoc !== record) {
-      this.preview = undefined;
       this.openedDoc = record;
     }
     else {
@@ -458,8 +457,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.subscription.add(
-        this.sqDocumentUpload?.documentsUploadService
-          .uploadConfig$.subscribe((uploadConfig) => {
+        this.documentsUploadService.uploadConfig$.subscribe((uploadConfig) => {
             this.disabledUpload = !uploadConfig?.documentsUploadEnabled;
           })
       );
@@ -473,10 +471,6 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.resetChatAction.disabled = result;
         })
       );
-      // Update the document list after the dialog is closed
-      this.dialog?.nativeElement.addEventListener("close", () => {
-        this.sqDocumentOverview.updateUploadedDocumentsList();
-      });
     });
 
   }

@@ -17,9 +17,41 @@
         "helpButton": "Mehr über die Suche erfahren"
     },
 
+    "baskets": {
+        "baskets": "Sammlungen",
+        "addToBasket": "Zur Sammlung hinzufügen",
+        "removeFromBasket": "Aus der Sammlung entfernen",
+        "removeFromAllBaskets": "Aus allen Sammlungen entfernen",
+        "removeFromAllBasketsConfirmation": "Möchten Sie dieses Ergebnis wirklich aus diesen Sammlungen entfernen: {baskets}?",
+        "basketAlreadyExists": "Eine Sammlung mit diesem Namen ist bereits vorhanden. Möchten Sie sie ersetzen?",
+        "noBasket": "Sie haben noch kein Dokument zu einer Sammlung hinzugefügt...",
+        "createBasket": "Sammlung erstellen",
+        "manageBaskets": "Sammlungen verwalten",
+        "delete": "Diese Sammlung löschen"
+    },
+
+    "editBasket": {
+        "title": "Sammlung"
+    },
+
+    "manageBaskets": {
+        "title": "Sammlungen verwalten",
+        "tooltip": {
+            "export": "Exportieren Sie diese Sammlung"
+        }
+    },
+
+    "selectBasket": {
+        "title": "Wählen Sie Sammlung",
+        "newBasket": "Neue Sammlung..."
+    },
+
     "facet": {
         "preview": {
             "title": "Vorschau"
+        },
+        "labels": {
+            "title": "Etiketten"
         }
     },
 
@@ -34,8 +66,8 @@
         "recentQueriesTooltip": "Letzte Suchanfragen",
         "savedQueriesTooltip": "Gespeicherte Suchanfragen (einschließlich Filter)",
         "basketsTooltip": "Ablagekörbe",
-        "darkMode": "Dark mode",
-        "lightMode": "Light mode"
+        "darkMode": "Dunkelmodus",
+        "lightMode": "Lichtmodus"
     },
 
     "search": {

@@ -5,13 +5,14 @@ import { TranslocoService } from '@jsverse/transloco';
 import { ChatComponent, ChatConfig, ChatContextAttachment, MessageHandler, SuggestedAction } from "@sinequa/assistant/chat";
 import { SearchService } from "@sinequa/components/search";
 import { AppService } from "@sinequa/core/app-utils";
-import { ComponentWithLogin } from "@sinequa/core/login";
+import { AuthenticationService, ComponentWithLogin } from "@sinequa/core/login";
 import { PrincipalWebService, Record } from "@sinequa/core/web-services";
 import { Subscription } from "rxjs";
 import { environment } from "../environments/environment";
 import { MiniPreviewComponent } from "./preview/preview.component";
 import { IntlService } from "@sinequa/core/intl";
 import { NotificationsListenerService } from "./notification.listener";
+import { setGlobalConfig } from "@sinequa/atomic";
 
 @Component({
   selector: "app",
@@ -36,7 +37,8 @@ export class AppComponent extends ComponentWithLogin implements OnDestroy {
     private principalService: PrincipalWebService,
     private intlService: IntlService,
     private readonly transloco: TranslocoService,
-    public notificationsListenerService: NotificationsListenerService
+    public notificationsListenerService: NotificationsListenerService,
+    private authenticationService: AuthenticationService
   ) {
     super();
     this.transloco.setActiveLang(this.intlService.currentLocale.name);
@@ -52,6 +54,23 @@ export class AppComponent extends ComponentWithLogin implements OnDestroy {
     super.ngOnDestroy();
     this.subscription.unsubscribe();
   }
+
+  override onLoginComplete(){
+    /**
+     * The assistant library is now using the globalConfig object to manage user override
+     * Thus, it relies on the atomic library.
+     * However, the kiwAI app does not use the atomic library. It uses the core and components libraries under the hood.
+     * To ensure the user override feature works correctly, we need to manually propagate the user override state to the globalConfig object.
+     */
+    if (this.authenticationService.userOverrideActive && this.authenticationService.userOverride) {
+      const username = this.authenticationService.userOverride.userName;
+      const domain = this.authenticationService.userOverride.domain;
+      setGlobalConfig({ userOverrideActive: true, userOverride: { domain, username } });
+    } else {
+      setGlobalConfig({ userOverrideActive: false, userOverride: undefined });
+    }
+  }
+
 
   get instanceId(): string {
     return 'standalone-assistant';
