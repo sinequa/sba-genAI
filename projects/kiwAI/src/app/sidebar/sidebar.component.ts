@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly overrideResults$ = new BehaviorSubject<Results | undefined>(undefined);
   private _results: Results | undefined;
   disabledUpload: boolean = true;
-  uploadedDocumentsTitle: string = this.transloco.translate('uploaded');
+  uploadedDocumentsTitle: string;
   private readonly _subscription = new Subscription();
 
   constructor(
@@ -68,6 +68,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.transloco.load(this.transloco.getActiveLang()).subscribe(() => {
       // Safe to translate now
       this.internationalizeActionsTitle();
+      this.uploadedDocumentsTitle = this.transloco.translate('uploaded');
     });
 
     // React to future language switches
@@ -77,6 +78,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(() => {
           // Re-initialize on language switch
           this.internationalizeActionsTitle();
+          this.uploadedDocumentsTitle = this.transloco.translate('uploaded');
         })
     );
   }

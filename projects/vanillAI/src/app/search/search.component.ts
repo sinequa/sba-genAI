@@ -293,9 +293,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       case "Prefill":
         this.insertText(action.content);
         break;
+      case "Submit":
+        this.submitQuestion(action.content);
+        break;
       default:
         console.log("Assistant's unknown suggested action type: " + action.type);
     }
+  }
+
+  submitQuestion(question: string) {
+      this.sqChat.question = question;
+      this.sqChat.submitQuestion();
   }
 
   insertText(text: string): void {

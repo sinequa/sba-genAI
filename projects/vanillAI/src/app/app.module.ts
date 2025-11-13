@@ -41,11 +41,26 @@ import { FiltersModule } from "@sinequa/components/filters";
 import {
   ChatComponent,
   ChatSettingsV3Component,
-  CustomElementsService,
   DocumentListComponent,
   DocumentOverviewComponent,
   DocumentUploadComponent,
-  initializeCustomElements
+  CustomElementsService,
+  initializeCustomElements,
+  ASSISTANT_MARKDOWN_IT_PLUGINS,
+  markdownItCodeBlockPlugin,
+  markdownItImageReferencePlugin,
+  markdownItLinkPlugin,
+  markdownItPageReferencePlugin,
+  markdownItDocumentReferencePlugin,
+  ASSISTANT_CUSTOM_ELEMENTS,
+  DocumentReferenceComponent,
+  PageReferenceComponent,
+  ImageReferenceComponent,
+  CodeBlockComponent,
+  TableToolsComponent,
+  markdownItTableToolsPlugin,
+  ASSISTANT_UNAUTHORIZED_ACTION_TOKEN,
+  handleUnauthorizedLogic
 } from '@sinequa/assistant/chat';
 
 // Modules
@@ -66,10 +81,7 @@ import { environment } from "../environments/environment";
 import { HELP_DEFAULT_FOLDER_OPTIONS } from "../config";
 
 // Initialization of @sinequa/core
-export const startConfig: StartConfig = {
-  production: environment.production,
-  auditEnabled: true
-};
+export const startConfig: StartConfig = environment as any;
 
 // @sinequa/core config initializer
 export function StartConfigInitializer(startConfigWebService: StartConfigWebService) {
@@ -79,10 +91,10 @@ export function StartConfigInitializer(startConfigWebService: StartConfigWebServ
 
 // Application routes (see https://angular.io/guide/router)
 export const routes: Routes = [
-    {path: "home", component: HomeComponent},
-    {path: "search", component: SearchComponent},
-    {path: "preview", component: PreviewComponent},
-    {path: "**", redirectTo: "home"}
+  { path: "home", component: HomeComponent },
+  { path: "search", component: SearchComponent },
+  { path: "preview", component: PreviewComponent },
+  { path: "**", redirectTo: "home" }
 ];
 
 
@@ -94,7 +106,7 @@ export const searchOptions: SearchOptions = {
 
 
 // Application languages (intl service)
-import {LocalesConfig, Locale} from "@sinequa/core/intl";
+import { LocalesConfig, Locale } from "@sinequa/core/intl";
 import enLocale from "../locales/en";
 import frLocale from "../locales/fr";
 import deLocale from "../locales/de";
@@ -104,14 +116,14 @@ import { appInitializerFn } from "@sinequa/atomic";
 export class AppLocalesConfig implements LocalesConfig {
   defaultLocale: Locale;
   locales?: Locale[];
-    constructor(){
+  constructor() {
     this.locales = [
-            { name: "en", display: "msg#locale.en", data: enLocale},
-            { name: "fr", display: "msg#locale.fr", data: frLocale},
-            { name: "de", display: "msg#locale.de", data: deLocale}
-        ];
-        this.defaultLocale = this.locales[0];
-    }
+      { name: "en", display: "msg#locale.en", data: enLocale },
+      { name: "fr", display: "msg#locale.fr", data: frLocale },
+      { name: "de", display: "msg#locale.de", data: deLocale }
+    ];
+    this.defaultLocale = this.locales[0];
+  }
 }
 
 
@@ -178,47 +190,75 @@ export const breakpoints = {
     // server automatically at startup using the application name specified in the URL (app[-debug]/<app-name>).
     // This allows an application to avoid hard-coding parameters in the StartConfig but requires that the application
     // be served from the an app[-debug]/<app name> URL.
-    {provide: APP_INITIALIZER, useFactory: StartConfigInitializer, deps: [StartConfigWebService], multi: true},
+    { provide: APP_INITIALIZER, useFactory: StartConfigInitializer, deps: [StartConfigWebService], multi: true },
     { provide: APP_INITIALIZER, useFactory: () => appInitializerFn, multi: true },
     // Uncomment if the app is to be used with Teams
-    {provide: APP_INITIALIZER, useFactory: TeamsInitializer, deps: [AuthenticationService], multi: true},
+    { provide: APP_INITIALIZER, useFactory: TeamsInitializer, deps: [AuthenticationService], multi: true },
 
-    // Provides an APP_INITIALIZER which will initialize the custom elements defined in the @sinequa/assistant/chat
-    // library. This is required to be able to use the custom elements in Angular components templates.
+    // Provides the custom elements to be registered for the assistant
     {
-        provide: APP_INITIALIZER,
-        useFactory: initializeCustomElements,
-        multi: true,
-        deps: [CustomElementsService],
+      provide: ASSISTANT_CUSTOM_ELEMENTS,
+      useValue: {
+        'document-reference': DocumentReferenceComponent, // Defines the template to be used by the associated plugin markdownItDocumentReferencePlugin
+        'page-reference': PageReferenceComponent, // Defines the template to be used by the associated plugin markdownItPageReferencePlugin
+        'image-reference': ImageReferenceComponent, // Defines the template to be used by the associated plugin markdownItImageReferencePlugin
+        'code-block': CodeBlockComponent, // Defines the template to be used by the associated plugin markdownItCodeBlockPlugin
+        'table-tools': TableToolsComponent, // Defines the template to be used by the associated plugin markdownItTableToolsPlugin
+      },
+    },
+    // Provides an APP_INITIALIZER which will initialize the custom elements defined using ASSISTANT_CUSTOM_ELEMENTS
+    // This is required to be able to use the custom elements in Angular components templates.
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeCustomElements,
+      multi: true,
+      deps: [CustomElementsService],
+    },
+    // Provides the markdown-it plugins to be used by the assistant
+    {
+      provide: ASSISTANT_MARKDOWN_IT_PLUGINS,
+      useValue: [
+        markdownItDocumentReferencePlugin, // Uses the template defined by the key 'document-reference' in ASSISTANT_CUSTOM_ELEMENTS
+        markdownItPageReferencePlugin, // Uses the template defined by the key 'page-reference' in ASSISTANT_CUSTOM_ELEMENTS
+        markdownItImageReferencePlugin, // Uses the template defined by the key 'image-reference' in ASSISTANT_CUSTOM_ELEMENTS
+        markdownItLinkPlugin, // Standard link plugin (no custom element associated)
+        markdownItCodeBlockPlugin, // Uses the template defined by the key 'code-block' in ASSISTANT_CUSTOM_ELEMENTS
+        markdownItTableToolsPlugin, // Uses the template defined by the key 'table-tools' in ASSISTANT_CUSTOM_ELEMENTS
+      ],
+    },
+
+    {
+      provide: ASSISTANT_UNAUTHORIZED_ACTION_TOKEN,
+      useValue: handleUnauthorizedLogic
     },
 
     // Provides the Angular LocationStrategy to be used for reading route state from the browser's URL. Currently
     // only the HashLocationStrategy is supported by Sinequa.
-        {provide: LocationStrategy, useClass: HashLocationStrategy},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
 
     // Provides an HttpInterceptor to handle user login. The LoginInterceptor handles HTTP 401 responses
     // to Sinequa web service requests and initiates the login process.
-        {provide: HTTP_INTERCEPTORS, useClass: LoginInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: LoginInterceptor, multi: true },
 
     // Provides an HttpInterceptor that offers a centralized location through which all client-side
     // audit records pass. An application can replace AuditInterceptor with a subclass that overrides
     // the updateAuditRecord method to add custom audit information to the records.
-        {provide: HTTP_INTERCEPTORS, useClass: AuditInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: AuditInterceptor, multi: true },
 
     // Provides an HttpInterceptor that automatically processes any notifications specified in the $notifications
     // member of the response body to any Sinequa web service requests.
-        {provide: HTTP_INTERCEPTORS, useClass: NotificationsInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: NotificationsInterceptor, multi: true },
 
     { provide: SCREEN_SIZE_RULES, useValue: breakpoints },
 
     // Provides default help's folder options
     // this options can be overriden by the custom json configuration from the administration panel
     { provide: APP_HELP_FOLDER_OPTIONS, useValue: HELP_DEFAULT_FOLDER_OPTIONS },
-        { provide: FlowInjectionToken, useValue: Flow }
+    { provide: FlowInjectionToken, useValue: Flow }
   ],
-    bootstrap: [
-        AppComponent
-    ]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule {
 }

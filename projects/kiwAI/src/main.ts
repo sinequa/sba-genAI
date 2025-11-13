@@ -5,6 +5,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { setGlobalConfig } from "@sinequa/atomic";
+import { initializeFetchInterceptor, setAppInjector } from "@sinequa/assistant/chat";
 
 if (environment.production) {
     enableProdMode();
@@ -13,5 +14,12 @@ if (environment.production) {
 // mandatory, because "@sinequa/atomic" is used in the application
 setGlobalConfig(environment as any);
 
-platformBrowserDynamic().bootstrapModule(AppModule, {preserveWhitespaces: true})
+// 1. Call the patching function BEFORE bootstrapping Angular
+initializeFetchInterceptor();
+
+platformBrowserDynamic().bootstrapModule(AppModule, { preserveWhitespaces: true })
+    .then(appRef => {
+        // 2. IMPORTANT: Set the global injector after successful bootstrap
+        setAppInjector(appRef.injector);
+    })
     .catch(err => console.error(err));

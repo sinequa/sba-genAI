@@ -8,6 +8,7 @@ import { BsUserSettingsModule } from '@sinequa/components/user-settings';
 import { AppService } from '@sinequa/core/app-utils';
 import { PrincipalWebService } from '@sinequa/core/web-services';
 import pkg from '@sinequa/assistant/package.json';
+import { Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'sq-user-card',
@@ -25,19 +26,12 @@ export class UserCardComponent implements OnChanges {
   versionAction: Action;
   customActions: Action[] = [];
 
+  private subscription = new Subscription();
+
   constructor(
     public principalService: PrincipalWebService,
     public appService: AppService,
     private readonly transloco: TranslocoService) {
-
-    this.settingsViewAction = new Action({
-      icon: "fas fa-gear fa-fw",
-      text: this.transloco.translate('openSettings'),
-      scrollable: true,
-      action: () => {
-        this.toggleChatSettings.emit();
-      }
-    });
 
     const sinequaVersion = appService.startConfig?.version ? ` + ${appService.startConfig?.version}` : '';
     this.versionAction = new Action({
@@ -48,17 +42,41 @@ export class UserCardComponent implements OnChanges {
     });
 
     this.customActions = [this.versionAction];
+
+    // React to future language switches
+    this.subscription.add(
+      this.transloco.langChanges$
+        .pipe(switchMap(lang => this.transloco.load(lang)))
+        .subscribe(() => {
+          this.refreshCustomActions();
+        })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.enableSettings) {
-      this.customActions = this.enableSettings ? [this.versionAction, this.settingsViewAction] : [this.versionAction];
+      this.refreshCustomActions();
     }
   }
 
   get name(): string {
     return !this.principalService.principal ? ''
       : this.principalService.principal['fullName'] as string || this.principalService.principal.name;
+  }
+
+  private refreshCustomActions(): void {
+    this.customActions = [this.versionAction];
+
+    if (this.enableSettings) {
+      this.customActions.push(new Action({
+        icon: "fas fa-gear fa-fw",
+        text: this.transloco.translate('openSettings'),
+        scrollable: true,
+        action: () => {
+          this.toggleChatSettings.emit();
+        }
+      }));
+    }
   }
 
 }
