@@ -359,6 +359,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
       }
       else if (this.snippetId !== undefined) {
+        this.preview.unselect(); // This is needed to reset previous selection otherwise the snippet selection will not work if you perform it when a mini-preview is already selected
         this.preview.select(`snippet_${this.snippetId}`);
       }
     }
