@@ -35,6 +35,8 @@ import {
   ImageReferenceComponent,
   CodeBlockComponent,
   TableToolsComponent,
+  ChartPlotComponent,
+  markdownItChartJsPlugin,
   markdownItTableToolsPlugin,
   ASSISTANT_UNAUTHORIZED_ACTION_TOKEN,
   handleUnauthorizedLogic
@@ -154,6 +156,7 @@ export const breakpoints = {
         'image-reference': ImageReferenceComponent, // Defines the template to be used by the associated plugin markdownItImageReferencePlugin
         'code-block': CodeBlockComponent, // Defines the template to be used by the associated plugin markdownItCodeBlockPlugin
         'table-tools': TableToolsComponent, // Defines the template to be used by the associated plugin markdownItTableToolsPlugin
+        'chart-plot': ChartPlotComponent, // Defines the template to be used by the associated plugin markdownItChartJsPlugin
       },
     },
     // Provides an APP_INITIALIZER which will initialize the custom elements defined using ASSISTANT_CUSTOM_ELEMENTS
@@ -174,6 +177,7 @@ export const breakpoints = {
         markdownItLinkPlugin, // Standard link plugin (no custom element associated)
         markdownItCodeBlockPlugin, // Uses the template defined by the key 'code-block' in ASSISTANT_CUSTOM_ELEMENTS
         markdownItTableToolsPlugin, // Uses the template defined by the key 'table-tools' in ASSISTANT_CUSTOM_ELEMENTS
+        markdownItChartJsPlugin, // Uses the template defined by the key 'chart-plot' in ASSISTANT_CUSTOM_ELEMENTS
       ],
     },
 

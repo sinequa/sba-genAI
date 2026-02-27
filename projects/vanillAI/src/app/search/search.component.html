@@ -115,13 +115,14 @@
               <!-- Assistant -->
               <sq-facet-card class="w-100 mb-2"
                 [title]="'assistant.title' | transloco"
-                [preference]="'assistant'"
+                [preference]="assistantFacetPreferenceKey"
                 icon="fas fa-comments primary-icon"
                 [actions]="enableSettings ? [chatSettingsAction, resetChatAction] : [resetChatAction]">
                 <sq-chat-v3 #sqChat
                   [hidden]="chatSettingsAction.selected"
                   [instanceId]="instanceId"
                   [query]="searchService.query"
+                  [collapsed]="isChatFacetCollapsed"
                   class="sq-chat"
 
                   (openDocument)="openDocument($event)"

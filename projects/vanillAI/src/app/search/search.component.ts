@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BsFacetDate } from '@sinequa/analytics/timeline';
 import { Action } from '@sinequa/components/action';
@@ -7,7 +7,7 @@ import { MetadataConfig } from '@sinequa/components/metadata';
 import { Preview, PreviewHighlightColors, PreviewService } from '@sinequa/components/preview';
 import { SearchService } from '@sinequa/components/search';
 import { SelectionService } from '@sinequa/components/selection';
-import { HelpFolderOptions } from '@sinequa/components/user-settings';
+import { HelpFolderOptions, UserPreferences } from '@sinequa/components/user-settings';
 import { UIService } from '@sinequa/components/utils';
 import { AppService, Query } from '@sinequa/core/app-utils';
 import { IntlService } from '@sinequa/core/intl';
@@ -22,9 +22,11 @@ import { ChatComponent, ChatConfig, ChatContextAttachment, SuggestedAction, Docu
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
+  standalone: false
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  public readonly ui = inject(UIService);
 
   @ViewChild(ChatComponent) sqChat: ChatComponent;
   @ViewChild("dialog") dialog: ElementRef<HTMLDialogElement>;
@@ -96,14 +98,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private intlService: IntlService,
     private appService: AppService,
-    public readonly ui: UIService,
     public searchService: SearchService,
     public selectionService: SelectionService,
     public loginService: LoginService,
     public auditService: AuditWebService,
     private principalService: PrincipalWebService,
     private readonly transloco: TranslocoService,
-    public documentsUploadService: DocumentsUploadService
+    public documentsUploadService: DocumentsUploadService,
+    public prefs: UserPreferences
   ) {
 
     this.chatSettingsAction = new Action({
@@ -454,6 +456,14 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   get miniPreviewInstanceId(): string {
     return 'mini-preview-assistant';
+  }
+
+  get assistantFacetPreferenceKey(): string {
+    return 'collapse-' + this.instanceId + '-facet';
+  }
+
+  get isChatFacetCollapsed(): boolean {
+    return this.prefs.get(this.assistantFacetPreferenceKey) || false;
   }
 
   toggleChatSettings(value: boolean) {

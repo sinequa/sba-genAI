@@ -8,7 +8,7 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "esnext",
     "resolveJsonModule": true,
@@ -39,7 +39,7 @@
       ],
       "@sinequa/assistant": ["./node_modules/@sinequa/assistant"]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

@@ -19,7 +19,8 @@ import { setGlobalConfig } from "@sinequa/atomic";
 
 @Component({
     selector: "app",
-    templateUrl: "./app.component.html"
+    templateUrl: "./app.component.html",
+    standalone: false
 })
 export class AppComponent extends ComponentWithLogin implements OnDestroy {
     subscription = new Subscription();

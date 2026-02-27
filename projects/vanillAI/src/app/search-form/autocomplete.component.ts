@@ -22,7 +22,8 @@ import { debounceTime, map, switchMap } from "rxjs/operators";
     font-size: 0.875rem;
   }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class AutocompleteComponent implements OnInit, OnChanges, OnDestroy {
   @Input() inputElement: HTMLInputElement;

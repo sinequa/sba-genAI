@@ -17,7 +17,8 @@ import { setGlobalConfig } from "@sinequa/atomic";
 @Component({
   selector: "app",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  styleUrls: ["./app.component.scss"],
+  standalone: false
 })
 export class AppComponent extends ComponentWithLogin implements OnDestroy {
   @ViewChild(ChatComponent) sqChat: ChatComponent;

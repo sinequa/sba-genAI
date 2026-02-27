@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AppService } from '@sinequa/core/app-utils';
 import { LoginService } from '@sinequa/core/login';
@@ -10,16 +10,17 @@ import { FEATURES } from '../../config';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent implements OnInit {
+  private readonly ui = inject(UIService);
 
   isDark$= this.ui.isDarkTheme$;
 
   constructor(
     public loginService: LoginService,
     public searchService: SearchService,
-    private readonly ui: UIService,
     private titleService: Title,
     private intlService: IntlService,
     private appService: AppService) { }
