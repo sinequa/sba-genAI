@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **sba-genAI** will remain on Angular 20 (supported until 2026-11-21), and is now **deprecated**. Customers are encouraged to migrate to Mint & Atomic libraries.
+
 # General Assistant Documentation
 
 This repository contains the two search-based applications called kiwAI and vanillAI.
